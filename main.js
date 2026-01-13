@@ -311,11 +311,11 @@ async function loadEmbeddings() {
         // Filter UMAP by sample
         umap = filterBySample(umap);
         
-        // Load PCA Harmony - first 5 components
-        updateStatus('Loading PCA Harmony...');
+        // Load PCA - first 5 components
+        updateStatus('Loading PCA...');
         let pca = null;
         try {
-            const pca_array = await zarr.open(root.resolve('obsm/X_pca_harmony'), { kind: 'array' });
+            const pca_array = await zarr.open(root.resolve('obsm/X_pca'), { kind: 'array' });
             const pca_data = await zarr.get(pca_array);
             
             // pca_data.data is a flat array, pca_data.shape is [n_cells, n_dims]
@@ -332,9 +332,9 @@ async function loadEmbeddings() {
                 pca_5d.push(point);
             }
             pca = pca_5d;
-            console.log(`Loaded PCA Harmony: shape=${pca.length}x${pca[0].length}`);
+            console.log(`Loaded PCA: shape=${pca.length}x${pca[0].length}`);
         } catch (e) {
-            console.warn(`Error loading PCA Harmony: ${e}`);
+            console.warn(`Error loading PCA: ${e}`);
             pca = new Array(n_cells).fill(null).map(() => new Array(5).fill(0));
         }
         
