@@ -19,9 +19,7 @@ body {
 }
 
 #left-column {
-    width: 350px;
-    min-width: 300px;
-    max-width: 400px;
+    width: 300px;
     flex-shrink: 0;
     background: rgba(0, 0, 0, 0.95);
     overflow-y: auto;

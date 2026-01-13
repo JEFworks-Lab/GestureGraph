@@ -311,7 +311,7 @@ async function loadEmbeddings() {
         // Filter UMAP by sample
         umap = filterBySample(umap);
         
-        // Load PCA - first 5 components
+        // Load PCA - first 8 components (needed for PCs 7-8)
         updateStatus('Loading PCA...');
         let pca = null;
         try {
@@ -320,22 +320,22 @@ async function loadEmbeddings() {
             
             // pca_data.data is a flat array, pca_data.shape is [n_cells, n_dims]
             // Data is stored in row-major order
-            const total_dims = pca_data.shape[1] || 5;
-            const n_dims = Math.min(5, total_dims);
-            const pca_5d = [];
+            const total_dims = pca_data.shape[1] || 8;
+            const n_dims = Math.min(8, total_dims);
+            const pca_8d = [];
             for (let i = 0; i < n_cells; i++) {
                 const idx = i * total_dims;
                 const point = [];
                 for (let d = 0; d < n_dims; d++) {
                     point.push(pca_data.data[idx + d] || 0);
                 }
-                pca_5d.push(point);
+                pca_8d.push(point);
             }
-            pca = pca_5d;
+            pca = pca_8d;
             console.log(`Loaded PCA: shape=${pca.length}x${pca[0].length}`);
         } catch (e) {
             console.warn(`Error loading PCA: ${e}`);
-            pca = new Array(n_cells).fill(null).map(() => new Array(5).fill(0));
+            pca = new Array(n_cells).fill(null).map(() => new Array(8).fill(0));
         }
         
         // Filter PCA by sample
@@ -681,14 +681,34 @@ function onHandResults(results) {
         if (currentMode !== 'umap') {
             updateVisualization('umap');
         }
-    } else if (fingerCount >= 2 && fingerCount <= 5) {
-        // 2-5 fingers → PCA (PC indices: fingerCount-1 to fingerCount)
-        // 2 fingers → PC 1-2 (indices 0-1)
-        // 3 fingers → PC 2-3 (indices 1-2)
-        // 4 fingers → PC 3-4 (indices 2-3)
-        // 5 fingers → PC 4-5 (indices 3-4)
-        const pcStart = fingerCount - 2; // 0, 1, 2, or 3
-        const pcEnd = fingerCount - 1;   // 1, 2, 3, or 4
+    } else if (fingerCount === 2) {
+        // 2 fingers → PCs 1-2 (indices 0-1)
+        const pcStart = 0;
+        const pcEnd = 1;
+        if (currentMode !== 'pca' || palmRotation !== pcStart) {
+            palmRotation = pcStart; // Reuse this variable to store PC start index
+            updateVisualization('pca', pcStart, pcEnd);
+        }
+    } else if (fingerCount === 3) {
+        // 3 fingers → PCs 3-4 (indices 2-3)
+        const pcStart = 2;
+        const pcEnd = 3;
+        if (currentMode !== 'pca' || palmRotation !== pcStart) {
+            palmRotation = pcStart; // Reuse this variable to store PC start index
+            updateVisualization('pca', pcStart, pcEnd);
+        }
+    } else if (fingerCount === 4) {
+        // 4 fingers → PCs 5-6 (indices 4-5)
+        const pcStart = 4;
+        const pcEnd = 5;
+        if (currentMode !== 'pca' || palmRotation !== pcStart) {
+            palmRotation = pcStart; // Reuse this variable to store PC start index
+            updateVisualization('pca', pcStart, pcEnd);
+        }
+    } else if (fingerCount === 5) {
+        // 5 fingers → PCs 7-8 (indices 6-7)
+        const pcStart = 6;
+        const pcEnd = 7;
         if (currentMode !== 'pca' || palmRotation !== pcStart) {
             palmRotation = pcStart; // Reuse this variable to store PC start index
             updateVisualization('pca', pcStart, pcEnd);
