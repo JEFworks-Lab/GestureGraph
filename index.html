@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cell Embedding Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="left-column">
+            <div id="info">
+                <h1>GestureGraph: Gesture-based Interactive Exploration of Single Cell Embeddings</h1>
+                <div id="links">
+                    <p>
+                        <a href="https://jef.works/CellCarto-OvulationSlideseq/" target="_blank">Full Data</a> | 
+                        <a href="https://jef.works/CellCarto-OvulationSlideseq/" target="_blank">Source Code</a> 
+                    </p>
+                </div>
+                <div id="status">
+                    <p id="status-text">Initializing...</p>
+                    <p id="mode-text">Mode: Global Spatial</p>
+                </div>
+                <div id="instructions">
+                    <p><strong>Controls:</strong></p>
+                    <ul>
+                        <li>0 fingers (fist) → Global Spatial</li>
+                        <li>1 finger → UMAP</li>
+                        <li>2 fingers → PCs 1-2</li>
+                        <li>3 fingers → PCs 2-3</li>
+                        <li>4 fingers → PCs 3-4</li>
+                        <li>5 fingers → PCs 4-5</li>
+                    </ul>
+                </div>
+                <div id="legend">
+                    <p>Legend:</p>
+                    <div id="legend-content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="right-column">
+            <canvas id="canvas"></canvas>
+            <div id="video-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="video-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+            "zarrita": "https://cdn.jsdelivr.net/npm/zarrita/+esm",
+            "hands": "https://cdn.jsdelivr.net/npm/@mediapipe/hands/+esm"
+        }
+    }
+    </script>
+    <script type="module"  src="main.js"></script>
+</body>
+</html>
